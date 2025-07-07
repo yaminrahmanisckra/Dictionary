@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}ড্যাশবোর্ড{% endblock %}
+{% block content %}
+<h2>ড্যাশবোর্ড</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">শব্দ ম্যানেজমেন্ট</h5>
+                <p class="card-text">নতুন শব্দ যোগ করুন, এডিট করুন বা ডিলিট করুন।</p>
+                <a href="{{ url_for('words') }}" class="btn btn-success">শব্দ ম্যানেজমেন্ট</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">ডিকশনারি ম্যানেজমেন্ট</h5>
+                <p class="card-text">অভিধান যোগ করুন, এডিট করুন বা ডিলিট করুন।</p>
+                <a href="{{ url_for('dictionaries') }}" class="btn btn-primary">ডিকশনারি দেখুন</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">ইউজার মেইনটেনেন্স</h5>
+                <p class="card-text">অ্যাডমিন ইউজার যোগ, এডিট ও ডিলিট করুন।</p>
+                <a href="{{ url_for('users') }}" class="btn btn-warning">ইউজার মেইনটেনেন্স</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

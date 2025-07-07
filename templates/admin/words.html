@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% block title %}শব্দ ম্যানেজমেন্ট{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>শব্দ ম্যানেজমেন্ট</h2>
+    <a href="{{ url_for('add_word') }}" class="btn btn-success">নতুন শব্দ যোগ করুন</a>
+</div>
+
+<form method="get" class="mb-4" action="{{ url_for('words') }}">
+    <div class="row g-2 align-items-center">
+        <div class="col-auto">
+            <label for="dictionary_id" class="col-form-label">অভিধান ফিল্টার:</label>
+        </div>
+        <div class="col-auto">
+            <select name="dictionary_id" id="dictionary_id" class="form-select">
+                <option value="0" {% if selected_dict_id == 0 %}selected{% endif %}>সব অভিধান</option>
+                {% for d in dictionaries %}
+                    <option value="{{ d.id }}" {% if selected_dict_id == d.id %}selected{% endif %}>{{ d.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <input type="text" name="q" class="form-control" placeholder="শব্দ সার্চ করুন" value="{{ search_query }}">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">ফিল্টার করুন</button>
+        </div>
+    </div>
+</form>
+
+{% if words %}
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>শব্দ</th>
+            <th>শব্দতাত্ত্বিক তথ‍্য</th>
+            <th>অর্থ</th>
+            <th>অভিধান</th>
+            <th>টীকা</th>
+            <th>অ্যাকশন</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for word in words %}
+        <tr>
+            <td>{{ word.word }}</td>
+            <td style="min-width:120px;max-width:200px;">{{ word.pos if word.pos else 'লিখুন' }}</td>
+            <td>{{ word.definition }}</td>
+            <td>
+                {% if word.dictionary_id %}
+                    {% set dictionary = word.dictionary %}
+                    {{ dictionary.name if dictionary else 'অজানা' }}
+                {% else %}
+                    অজানা
+                {% endif %}
+            </td>
+            <td>{{ word.note }}</td>
+            <td>
+                <a href="{{ url_for('edit_word', word_id=word.id) }}" class="btn btn-sm btn-primary">এডিট</a>
+                <form method="post" action="{{ url_for('delete_word', word_id=word.id) }}" style="display:inline-block;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('ডিলিট করতে চান?');">ডিলিট</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<nav aria-label="শব্দ পেজিনেশন">
+  <ul class="pagination">
+    {% if pagination.has_prev %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('words', page=pagination.prev_num, dictionary_id=selected_dict_id, q=search_query) }}">আগে</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">আগে</span></li>
+    {% endif %}
+    {% for p in range(1, pagination.pages + 1) %}
+      <li class="page-item {% if p == pagination.page %}active{% endif %}">
+        <a class="page-link" href="{{ url_for('words', page=p, dictionary_id=selected_dict_id, q=search_query) }}">{{ p }}</a>
+      </li>
+    {% endfor %}
+    {% if pagination.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="{{ url_for('words', page=pagination.next_num, dictionary_id=selected_dict_id, q=search_query) }}">পরের</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">পরের</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% else %}
+<div class="alert alert-info">
+    <h4>কোনো শব্দ নেই</h4>
+    <p>প্রথম শব্দ যোগ করুন।</p>
+    <a href="{{ url_for('add_word') }}" class="btn btn-primary">শব্দ যোগ করুন</a>
+</div>
+{% endif %}
+
+<div class="mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">ড্যাশবোর্ডে ফিরে যান</a>
+</div>
+{% endblock %} 

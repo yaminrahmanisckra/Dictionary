@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}ডিজিটাল বাংলা অভিধান{% endblock %}
+{% block content %}
+<h2>শব্দ খুঁজুন</h2>
+<form method="get" action="/">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" name="q" placeholder="শব্দ লিখুন" value="{{ query or '' }}">
+        <button class="btn btn-primary" type="submit">খুঁজুন</button>
+    </div>
+    <div class="mb-3">
+        <label><input type="checkbox" id="select_all_dicts"> সকল অভিধান</label>
+        {% for d in dictionaries %}
+            <label class="ms-2">
+                <input type="checkbox" name="dictionary_id" value="{{ d.id }}" class="dict-checkbox" {% if selected_dict_ids and d.id in selected_dict_ids %}checked{% endif %}>
+                {{ d.name }}
+            </label>
+        {% endfor %}
+    </div>
+</form>
+<script>
+// Select all functionality
+const selectAll = document.getElementById('select_all_dicts');
+const dictCheckboxes = document.querySelectorAll('.dict-checkbox');
+if (selectAll) {
+    selectAll.addEventListener('change', function() {
+        dictCheckboxes.forEach(cb => cb.checked = selectAll.checked);
+    });
+    // If all are checked, selectAll should be checked
+    function updateSelectAll() {
+        selectAll.checked = Array.from(dictCheckboxes).every(cb => cb.checked);
+    }
+    dictCheckboxes.forEach(cb => cb.addEventListener('change', updateSelectAll));
+    updateSelectAll();
+}
+</script>
+{% if words %}
+    <ul class="list-group">
+    {% for word in words %}
+        <li class="list-group-item">
+            <strong>শব্দ:</strong> {{ word.word }}<br>
+            <strong>শব্দতাত্ত্বিক তথ্য:</strong> {{ word.pos }}<br>
+            <strong>অর্থ:</strong> {{ word.definition }}<br>
+            <strong>টীকা:</strong> {{ word.note }}<br>
+            <strong>অভিধান:</strong> {{ word.dictionary.name if word.dictionary else '' }}
+        </li>
+    {% endfor %}
+    </ul>
+    {% if pagination and pagination.pages > 1 %}
+    <nav aria-label="শব্দ পেজিনেশন">
+      <ul class="pagination mt-3">
+        {% if pagination.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('index', q=query, page=pagination.prev_num, **{'dictionary_id': request.args.getlist('dictionary_id')}) }}">আগে</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">আগে</span></li>
+        {% endif %}
+        {% for p in range(1, pagination.pages + 1) %}
+          <li class="page-item {% if p == pagination.page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('index', q=query, page=p, **{'dictionary_id': request.args.getlist('dictionary_id')}) }}">{{ p }}</a>
+          </li>
+        {% endfor %}
+        {% if pagination.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('index', q=query, page=pagination.next_num, **{'dictionary_id': request.args.getlist('dictionary_id')}) }}">পরের</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">পরের</span></li>
+        {% endif %}
+      </ul>
+    </nav>
+    {% endif %}
+{% elif query %}
+    <div class="alert alert-warning">কোনো শব্দ পাওয়া যায়নি।</div>
+{% endif %}
+{% endblock %} 

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %}নতুন শব্দ{% endblock %}
+{% block content %}
+<h2>নতুন শব্দ যোগ করুন</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.word.label }}
+        {{ form.word(class_='form-control') }}
+        {% if form.word.errors %}
+            {% for error in form.word.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        <label for="pos">শব্দতাত্ত্বিক তথ‍্য</label>
+        <textarea name="pos" id="pos" class="form-control" rows="2">{{ form.pos.data or '' }}</textarea>
+        {% if form.pos.errors %}
+            {% for error in form.pos.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.definition.label }}
+        {{ form.definition(class_='form-control') }}
+        {% if form.definition.errors %}
+            {% for error in form.definition.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.dictionary_id.label }}
+        {{ form.dictionary_id(class_='form-control') }}
+        {% if form.dictionary_id.errors %}
+            {% for error in form.dictionary_id.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.note.label }}
+        {{ form.note(class_='form-control', rows=2) }}
+        {% if form.note.errors %}
+            {% for error in form.note.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-success">সংরক্ষণ করুন</button>
+    <a href="{{ url_for('words') }}" class="btn btn-secondary">বাতিল</a>
+</form>
+{% endblock %} 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}ইউজার মেইনটেনেন্স{% endblock %}
+{% block content %}
+<h2>ইউজার মেইনটেনেন্স</h2>
+<a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3">ড্যাশবোর্ডে ফিরে যান</a>
+<a href="{{ url_for('add_user') }}" class="btn btn-success mb-3">নতুন ইউজার তৈরি করুন</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ইউজারনেম</th>
+            <th>ইমেইল</th>
+            <th>অ্যাডমিন?</th>
+            <th>অ্যাকশন</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{% if user.is_admin %}হ্যাঁ{% else %}না{% endif %}</td>
+            <td>
+                <a href="{{ url_for('edit_user', user_id=user.id) }}" class="btn btn-sm btn-primary">এডিট</a>
+                <form method="post" action="{{ url_for('delete_user', user_id=user.id) }}" style="display:inline-block;">
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('ডিলিট করতে চান?');">ডিলিট</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %} 

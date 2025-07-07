@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}নতুন ডিকশনারি{% endblock %}
+{% block content %}
+<h2>নতুন ডিকশনারি যোগ করুন</h2>
+<form method="post">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.name.label }}
+        {{ form.name(class_='form-control') }}
+        {% if form.name.errors %}
+            {% for error in form.name.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.author.label }}
+        {{ form.author(class_='form-control') }}
+        {% if form.author.errors %}
+            {% for error in form.author.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.publisher.label }}
+        {{ form.publisher(class_='form-control') }}
+        {% if form.publisher.errors %}
+            {% for error in form.publisher.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="mb-3">
+        {{ form.edition.label }}
+        {{ form.edition(class_='form-control') }}
+        {% if form.edition.errors %}
+            {% for error in form.edition.errors %}
+                <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <button type="submit" class="btn btn-success">সংরক্ষণ করুন</button>
+    <a href="{{ url_for('dictionaries') }}" class="btn btn-secondary">বাতিল</a>
+</form>
+{% endblock %} 
