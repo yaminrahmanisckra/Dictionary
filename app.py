@@ -162,7 +162,7 @@ def add_word():
 @login_required
 @admin_required
 def edit_word(word_id):
-    word = Word.query.get_or_404(word_id)
+    word = db.session.get_or_404(Word, word_id)
     form = WordForm(obj=word)
     dictionaries = Dictionary.query.all()
     form.dictionary_id.choices = [(0, '-- ডিকশনারি নির্বাচন করুন --')] + [(d.id, d.name) for d in dictionaries]
@@ -181,7 +181,7 @@ def edit_word(word_id):
 @login_required
 @admin_required
 def delete_word(word_id):
-    word = Word.query.get_or_404(word_id)
+    word = db.session.get_or_404(Word, word_id)
     db.session.delete(word)
     db.session.commit()
     flash('শব্দ ডিলিট হয়েছে!')
@@ -216,7 +216,7 @@ def add_dictionary():
 @login_required
 @admin_required
 def edit_dictionary(dictionary_id):
-    dictionary = Dictionary.query.get_or_404(dictionary_id)
+    dictionary = db.session.get_or_404(Dictionary, dictionary_id)
     form = DictionaryForm(obj=dictionary)
     if form.validate_on_submit():
         dictionary.name = form.name.data
@@ -232,7 +232,7 @@ def edit_dictionary(dictionary_id):
 @login_required
 @admin_required
 def delete_dictionary(dictionary_id):
-    dictionary = Dictionary.query.get_or_404(dictionary_id)
+    dictionary = db.session.get_or_404(Dictionary, dictionary_id)
     db.session.delete(dictionary)
     db.session.commit()
     flash('ডিকশনারি ডিলিট হয়েছে!')
@@ -263,7 +263,7 @@ class UserEditForm(FlaskForm):
 @login_required
 @admin_required
 def edit_user(user_id):
-    user = User.query.get_or_404(user_id)
+    user = db.session.get_or_404(User, user_id)
     form = UserEditForm(obj=user)
     if form.validate_on_submit():
         user.username = form.username.data
@@ -280,7 +280,7 @@ def edit_user(user_id):
 @login_required
 @admin_required
 def delete_user(user_id):
-    user = User.query.get_or_404(user_id)
+    user = db.session.get_or_404(User, user_id)
     db.session.delete(user)
     db.session.commit()
     flash('ইউজার ডিলিট হয়েছে!')
