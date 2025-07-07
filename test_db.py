@@ -27,9 +27,9 @@ with app.app_context():
     except Exception as e:
         print(f"✗ Error checking user table schema: {e}")
     
-    # Try to load a user
+    # Try to load a user using SQLAlchemy 2.0 style
     try:
-        user = User.query.get(2)
+        user = db.session.get(User, 2)
         if user:
             print(f"✓ Successfully loaded user: {user.username} (email: {user.email})")
         else:
