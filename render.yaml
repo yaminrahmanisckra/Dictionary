@@ -7,5 +7,19 @@ services:
     envVars:
       - key: FLASK_ENV
         value: production
+      - key: FLASK_APP
+        value: app.py
       - key: PORT
-        value: 5000 
+        value: 5000
+      - key: SECRET_KEY
+        generateValue: true
+      - key: MAIL_SERVER
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USE_TLS
+        value: true
+    buildCommand: pip install -r requirements.txt
+    startCommand: |
+      flask db upgrade
+      gunicorn --bind 0.0.0.0:$PORT app:app 
